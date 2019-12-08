@@ -1,30 +1,63 @@
 console.log('Hey I\'m here');
 
 const Twit = require('twit');
-
+const fs = require('fs');
+const path = require('path');
 const config = require('./config');
+
+
 const T = new Twit(config);
 
 
-setInterval(tweetIt, 1000*20);
+//setInterval(tweetIt, 1000*20);
 
-function tweetIt() {
 
-    const targets = ['the dummy', 'senpai', 'one of the two goblins', 'the green goblin in particular', 'everyone'];
-    const randomTarget = Math.floor(Math.random() * targets.length);
+const random_from_array = images => images[Math.floor(Math.random() * images.length)];
 
-    const tweet = {
-        status: 'RoboChrisSay : I will now proceed to randomly yell at : ' + targets[randomTarget]
-    };
-    
-    T.post('statuses/update', tweet, tweeted);
-    testNumber++;
-    
-    function tweeted(err, data, response) {
+
+const upload_random_image = images => {
+    console.log('Opening an image...');
+    const image_path = path.join(__dirname, '/images/' + random_from_array(images));
+    const b64content = fs.readFileSync(image_path, { encoding: 'base64' });
+
+    console.log('Uploading an image...');
+
+    T.post('media/upload', { media_data: b64content }, function (err, data, response) {
         if (err) {
+            console.log('ERROR:');
             console.log(err);
         } else {
-            console.log('It worked!');
+            console.log('Image uploaded!');
+            console.log('Now tweeting it...');
+
+            T.post('statuses/update', {
+                status: 'Yukinode.js posting a picture',
+                media_ids: new Array(data.media_id_string)
+            },
+                function(err, data, response) {
+                    if (err) {
+                        console.log('Error:');
+                        console.log(err);
+                    } else {
+                        console.log('Posted an image!');
+                    }
+                }
+            );
         }
-    };
-};
+    });
+}
+
+fs.readdir(__dirname + '/images', function(err, files) {
+    if (err) {
+        console.log(err);
+    } else {
+        const images = [];
+        files.forEach(function(f) {
+            images.push(f);
+        });
+
+        setInterval(function() {
+            upload_random_image(images);
+        }, 5000);
+    }
+})
