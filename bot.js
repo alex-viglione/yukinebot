@@ -9,9 +9,6 @@ const config = require('./config');
 const T = new Twit(config);
 
 
-//setInterval(tweetIt, 1000*20);
-
-
 const random_from_array = images => images[Math.floor(Math.random() * images.length)];
 
 
@@ -22,19 +19,19 @@ const upload_random_image = images => {
 
     console.log('Uploading an image...');
 
-    T.post('media/upload', { media_data: b64content }, function (err, data, response) {
+    T.post('media/upload', { media_data: b64content }, (err, data, response) => {
         if (err) {
             console.log('ERROR:');
             console.log(err);
         } else {
-            console.log('Image uploaded!');
-            console.log('Now tweeting it...');
+            console.log('Image uploaded');
+            console.log('Tweeting the image...');
 
             T.post('statuses/update', {
                 status: 'Yukinode.js posting a picture',
                 media_ids: new Array(data.media_id_string)
             },
-                function(err, data, response) {
+                (err, data, response) => {
                     if (err) {
                         console.log('Error:');
                         console.log(err);
@@ -47,17 +44,17 @@ const upload_random_image = images => {
     });
 }
 
-fs.readdir(__dirname + '/images', function(err, files) {
+fs.readdir(__dirname + '/images', (err, files) => {
     if (err) {
         console.log(err);
     } else {
         const images = [];
-        files.forEach(function(f) {
+        files.forEach(f => {
             images.push(f);
         });
 
-        setInterval(function() {
+        setInterval(() => {
             upload_random_image(images);
-        }, 5000);
+        }, 86400000);
     }
 })
