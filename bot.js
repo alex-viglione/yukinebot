@@ -3,7 +3,6 @@ console.log('Hey I\'m here');
 const Twit = require('twit');
 const fs = require('fs');
 const path = require('path');
-require("dotenv").config();
 
 
 const config = {
