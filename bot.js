@@ -13,20 +13,14 @@ const random_from_array = images => images[Math.floor(Math.random() * images.len
 
 
 const upload_random_image = images => {
-    console.log('Opening an image...');
     const image_path = path.join(__dirname, '/images/' + random_from_array(images));
     const b64content = fs.readFileSync(image_path, { encoding: 'base64' });
-
-    console.log('Uploading an image...');
 
     T.post('media/upload', { media_data: b64content }, (err, data, response) => {
         if (err) {
             console.log('ERROR:');
             console.log(err);
         } else {
-            console.log('Image uploaded');
-            console.log('Tweeting the image...');
-
             T.post('statuses/update', {
                 status: 'Yukinode.js posting a picture',
                 media_ids: new Array(data.media_id_string)
