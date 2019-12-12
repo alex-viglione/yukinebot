@@ -28,7 +28,7 @@ const upload_random_image = images => {
             console.log(err);
         } else {
             T.post('statuses/update', {
-                status: 'Daily Yukine',
+                status: 'Testing in progress',
                 media_ids: new Array(data.media_id_string)
             },
                 (err, data, response) => {
@@ -55,6 +55,6 @@ fs.readdir(__dirname + '/images', (err, files) => {
 
         setInterval(() => {
             upload_random_image(images);
-        }, 86400000);
+        }, 10000);
     }
 });
