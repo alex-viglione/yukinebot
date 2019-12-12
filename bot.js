@@ -22,7 +22,7 @@ const upload_random_image = images => {
             console.log(err);
         } else {
             T.post('statuses/update', {
-                status: 'Yukinode.js posting a picture',
+                status: 'Daily Yukine',
                 media_ids: new Array(data.media_id_string)
             },
                 (err, data, response) => {
