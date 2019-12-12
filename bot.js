@@ -3,8 +3,15 @@ console.log('Hey I\'m here');
 const Twit = require('twit');
 const fs = require('fs');
 const path = require('path');
-const config = require('./config');
+require("dotenv").config();
 
+
+const config = {
+    consumer_key: process.env.CONSUMER_KEY,
+    consumer_secret: process.env.CONSUMER_SECRET,
+    access_token: process.env.ACCESS_TOKEN,
+    access_token_secret: process.env.ACCESS_TOKEN_SECRET
+};
 
 const T = new Twit(config);
 
@@ -36,7 +43,7 @@ const upload_random_image = images => {
             );
         }
     });
-}
+};
 
 fs.readdir(__dirname + '/images', (err, files) => {
     if (err) {
@@ -51,4 +58,4 @@ fs.readdir(__dirname + '/images', (err, files) => {
             upload_random_image(images);
         }, 86400000);
     }
-})
+});
