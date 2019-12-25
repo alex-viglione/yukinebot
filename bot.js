@@ -67,9 +67,6 @@ setInterval(() => {
     upload_random_image(imagesArray, 'Daily Yukine');
 }, 82800000);
 
-const stream = T.stream('user');
-stream.on('tweet', replyZenbu);
-
 
 const replyZenbu = msgContent => {
     const replyto = msgContent.in_reply_to_screen_name;
@@ -83,3 +80,6 @@ const replyZenbu = msgContent => {
         upload_random_image(imagesArray, statusText);
     }
 }
+
+const stream = T.stream('user');
+stream.on('tweet', replyZenbu);
