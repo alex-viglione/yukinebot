@@ -65,9 +65,10 @@ const imagesArray = loadImages();
 
 setInterval(() => {
     upload_random_image(imagesArray, 'Daily Yukine');
-}, 82800000);
+}, 60000); // 82800000
 
-
+// ! User stream is deprecated, feature on hold until I find a new way
+/*
 const replyZenbu = msgContent => {
     const replyto = msgContent.in_reply_to_screen_name;
     const text = msgContent.text.toLowerCase();
@@ -83,3 +84,4 @@ const replyZenbu = msgContent => {
 
 const stream = T.stream('user');
 stream.on('tweet', replyZenbu);
+*/
