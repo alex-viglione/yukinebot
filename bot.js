@@ -47,27 +47,24 @@ const upload_random_image = (images, statusText) => {
     });
 };
 
-const loadImages = () => {
-    fs.readdir(__dirname + '/images', (err, files) => {
-        if (err) {
-            console.log(err);
-        } else {
-            const images = [];
-            files.forEach(f => {
-                images.push(f);
-            });
-            return images;
-        }
-    });
-}
 
-const imagesArray = loadImages();
+fs.readdir(__dirname + '/images', (err, files) => {
+    if (err) {
+        console.log(err);
+    } else {
+        const images = [];
+        files.forEach(f => {
+            images.push(f);
+        });
+        
+        setInterval(() => {
+            upload_random_image(images, 'Daily Yukine');
+        }, 60000); //82800000
+    }
+});
 
-setInterval(() => {
-    upload_random_image(imagesArray, 'Daily Yukine');
-}, 60000); // 82800000
 
-// ! User stream is deprecated, feature on hold until I find a new way
+// ! User stream is deprecated, feature on hold until I find another way
 /*
 const replyZenbu = msgContent => {
     const replyto = msgContent.in_reply_to_screen_name;
