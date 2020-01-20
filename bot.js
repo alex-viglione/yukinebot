@@ -51,7 +51,7 @@ fs.readdir(__dirname + '/images', (err, files) => {
         });
         
         setInterval(() => {
-            upload_random_image(images, 'Daily Yukine');
-        }, 7200000);
+            upload_random_image(images, 'Testing in progress...');
+        }, 60000);
     }
 });
