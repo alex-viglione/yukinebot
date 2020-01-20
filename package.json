@@ -1,7 +1,7 @@
 {
   "name": "yukinebot",
   "version": "1.0.0",
-  "description": "A bot that will post screencaps and fanarts of Chris Yukine (Symphogear) with sources to the fanartists.",
+  "description": "A bot that will post screencaps of Chris Yukine (Symphogear).",
   "main": "bot.js",
   "scripts": {
     "test": "jest"
@@ -9,7 +9,8 @@
   "keywords": [
     "chris",
     "yukine",
-    "symphogear"
+    "symphogear",
+    "bot"
   ],
   "author": "Alexandre Viglione",
   "license": "ISC",
