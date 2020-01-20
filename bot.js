@@ -52,6 +52,6 @@ fs.readdir(__dirname + '/images', (err, files) => {
         
         setInterval(() => {
             upload_random_image(images, 'Testing in progress...');
-        }, 60000);
+        }, 43200000);
     }
 });
