@@ -1,23 +1,21 @@
 {
-  "name": "yukinebot",
-  "version": "1.0.0",
-  "description": "A bot that will post screencaps of Chris Yukine (Symphogear).",
-  "main": "bot.js",
-  "scripts": {
-    "test": "jest"
-  },
-  "keywords": [
-    "chris",
-    "yukine",
-    "symphogear",
-    "bot"
-  ],
-  "author": "Alexandre Viglione",
-  "license": "ISC",
-  "dependencies": {
-    "twit": "^2.2.11"
-  },
-  "devDependencies": {
-    "jest": "^24.9.0"
-  }
+    "name": "yukinebot",
+    "version": "1.0.0",
+    "description": "A bot that will post screencaps of Chris Yukine (Symphogear).",
+    "main": "bot.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [
+        "chris",
+        "yukine",
+        "symphogear",
+        "bot"
+    ],
+    "author": "Alexandre Viglione",
+    "license": "ISC",
+    "dependencies": {
+        "twit": "^2.2.11"
+    },
+    "devDependencies": {}
 }
