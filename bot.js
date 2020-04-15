@@ -48,7 +48,7 @@ function upload_random_image() {
                             console.log(`Error: ${err}`);
                         } else {
                             T.post('statuses/update', {
-                                status: 'ongoing tests',
+                                status: 'Daily Yukine',
                                 media_ids: new Array(data.media_id_string)
                             },
                                 (err, data, response) => {
