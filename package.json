@@ -10,13 +10,14 @@
         "chris",
         "yukine",
         "symphogear",
+        "twitter",
         "bot"
     ],
     "author": "Alexandre Viglione",
     "license": "ISC",
     "dependencies": {
-        "axios": "^0.19.2",
         "dotenv": "^8.2.0",
+        "mongoose": "^5.9.9",
         "twit": "^2.2.11"
     }
 }

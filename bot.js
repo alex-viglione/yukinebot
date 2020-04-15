@@ -1,57 +1,72 @@
-const Twit = require('twit');
-const fs = require('fs');
+require('dotenv').config();
+const mongoose = require('mongoose');
+mongoose.connect(
+    process.env.MONGODB_URI,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
+);
+const conn = mongoose.connection;
+
 const path = require('path');
+const fs = require('fs');
 
+const Twit = require('twit');
 const config = require('./config');
-
 const T = new Twit(config);
 
-// Returning a random filename
-const random_from_array = images => images[Math.floor(Math.random() * images.length)];
+function upload_random_image() {
+    conn.once('open', function () {
+        const gfs = new mongoose.mongo.GridFSBucket(conn.db);
+        mongoose.model('filename', { filename: String }, 'fs.files');
+        const filename = mongoose.model('filename');
 
+        filename.find({}, (err, data) => {
+            if (err) {
+                console.log('Error: ', err);
+            }
+            let namesArray = [];
+            data.forEach(el => {
+                namesArray.push(el.filename);
+            });
 
-const upload_random_image = (images, statusText) => {
-    // Fetching a random image's file name and path
-    const image_path = path.join(__dirname, '/images/' + random_from_array(images));
+            setInterval(() => {
 
-    // Encoding the file
-    const b64content = fs.readFileSync(image_path, { encoding: 'base64' });
+                const choice = namesArray[Math.floor(Math.random() * namesArray.length)];
 
-    // Uploading the image as media on twitter
-    T.post('media/upload', { media_data: b64content }, (err, data, response) => {
-        if (err) {
-            console.log(`Error: ${err}`);
-        } else {
-            // Posting that media with a status
-            T.post('statuses/update', {
-                status: statusText,
-                media_ids: new Array(data.media_id_string)
-            },
-                (err, data, response) => {
-                    if (err) {
-                        console.log(`Error: ${err}`);
-                    } else {
-                        console.log('Posted an image!');
-                    }
-                }
-            );
-        }
-    });
-};
+                const readStream = gfs.openDownloadStreamByName(choice);
+                const fs_write_stream = fs.createWriteStream(path.join(__dirname, `/fromdb/${choice}`));
+                readStream.pipe(fs_write_stream);
 
-// BOT PART
-fs.readdir(__dirname + '/images', (err, files) => {
-    if (err) {
-        console.log(err);
-    } else {
-        // Pushing filenames into a new array to contain them all
-        const images = [];
-        files.forEach(f => {
-            images.push(f);
+                fs_write_stream.on('close', function () {
+                    const image_path = path.join(__dirname, '/fromdb/' + choice);
+                    const b64content = fs.readFileSync(image_path, { encoding: 'base64' });
+
+                    T.post('media/upload', { media_data: b64content }, (err, data, response) => {
+                        if (err) {
+                            console.log(`Error: ${err}`);
+                        } else {
+                            T.post('statuses/update', {
+                                status: 'ongoing tests',
+                                media_ids: new Array(data.media_id_string)
+                            },
+                                (err, data, response) => {
+                                    if (err) {
+                                        console.log(`Error: ${err}`);
+                                    } else {
+                                        console.log('Posted an image!');
+                                    }
+                                }
+                            );
+                        }
+                    });
+
+                });
+            }, 43200000);
+
         });
-        
-        setInterval(() => {
-            upload_random_image(images, 'Daily Yukine');
-        }, 43200000);
-    }
-});
+    });
+}
+
+upload_random_image();

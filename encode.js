@@ -1,27 +1,36 @@
 require('dotenv').config();
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-
-const postData = (img64, name) => {
-    axios.post(`${process.env.DB_HOST}/images.json`, {
-        name: name,
-        value: img64
-    })
-        .then(res => console.log(`Status: ${res.status} | Data succesfully stored.`))
-        .catch(e => console.log('An error occurred in posting the data: ', e.message));
-}
-
-fs.readdir(`${__dirname}/images`, (err, files) => {
-    if (err) {
-        console.log(err);
-    } else {
-        let name = 1;
-        files.forEach(f => {
-            const image_path = path.join(__dirname, `/images/${f}`);
-            const b64string = fs.readFileSync(image_path, { encoding: 'base64' });
-            postData(b64string, name);
-            name++;
-        });
+const mongoose = require('mongoose');
+mongoose.connect(
+    process.env.MONGODB_URI,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     }
+);
+const conn = mongoose.connection;
+
+const path = require('path');
+const fs = require('fs');
+
+conn.once('open', function () {
+    console.log('- Connection open -');
+    const gfs = new mongoose.mongo.GridFSBucket(conn.db);
+
+    fs.readdir(`${__dirname}/${process.env.PICS_FOLDER}`, (err, files) => {
+        if (err) {
+            console.log(err);
+        } else {
+            files.forEach(f => {
+                const image_path = path.join(__dirname, `/${process.env.PICS_FOLDER}/${f}`);
+
+                const writeStream = gfs.openUploadStream(f);
+
+                fs.createReadStream(image_path).pipe(writeStream);
+
+                writeStream.on('finish', function (file) {
+                    console.log(`${file.filename} stored to db`);
+                });
+            });
+        }
+    });
 });
