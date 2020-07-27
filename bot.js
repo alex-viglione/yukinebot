@@ -23,7 +23,7 @@ function postPic(picData) {
             console.log(`Error: ${err}`);
         } else {
             T.post('statuses/update', {
-                status: '<TESTING IN PROGRESS>',
+                status: 'Daily Yukine',
                 media_ids: new Array(data.media_id_string)
             },
                 (err, data, response) => {
